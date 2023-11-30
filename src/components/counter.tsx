@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { DateTime } from "luxon";
+import { cn } from "@/lib/utils";
 import { useFormData, useRemainingTime } from "@/lib/hooks";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -12,13 +14,13 @@ function CounterDisplaySingleDigit({ num }: { num: number }) {
   }, [num]);
 
   const getNumber = (n: number) => (
-    <div key={n} className="w-[4rem] h-[5rem] flex justify-center items-center">
+    <div key={n} className="w-[45px] h-[5rem] flex justify-center items-center">
       <span className="text-[5rem]">{n}</span>
     </div>
   );
 
   return (
-    <div className="w-[4rem] h-[5rem] flex flex-col overflow-hidden">
+    <div className="w-[45px] h-[5rem] flex flex-col overflow-hidden">
       <div
         className="transition-all duration-500"
         style={{ marginTop: `calc(${-offset} * 5rem)` }}
@@ -32,9 +34,11 @@ function CounterDisplaySingleDigit({ num }: { num: number }) {
 function CounterDisplayNumber({
   num,
   tooltip,
+  className,
 }: {
   num: number;
   tooltip?: string;
+  className?: string;
 }) {
   const nums = useMemo(() => {
     const _nums = num
@@ -46,7 +50,7 @@ function CounterDisplayNumber({
 
   return (
     <Tooltip>
-      <TooltipTrigger disabled={!tooltip} className="flex">
+      <TooltipTrigger disabled={!tooltip} className={cn("flex", className)}>
         {nums.map((num, i) => (
           <CounterDisplaySingleDigit key={`${i}`} num={num} />
         ))}
@@ -56,16 +60,28 @@ function CounterDisplayNumber({
   );
 }
 
-function CounterSegment({ text }: { text: string }) {
+function CounterSegment({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}) {
   return (
-    <div className="min-w-[4rem] h-[5rem] flex justify-center items-center">
+    <div
+      className={cn(
+        "w-[45px] h-[5rem] flex justify-center items-center",
+        className
+      )}
+    >
       <span className="text-[5rem]">{text}</span>
     </div>
   );
 }
 
 export function Counter() {
-  const [{ digits }] = useFormData();
+  const [{ endDate, digits }] = useFormData();
+  const isTMinus = useMemo(() => endDate > DateTime.now(), [endDate]);
   const remaining = useRemainingTime();
 
   const displays = useMemo(() => {
@@ -73,37 +89,53 @@ export function Counter() {
     if (digits.includes("d"))
       _displays.push(
         <CounterDisplayNumber
-          key="h"
+          key="d"
           num={remaining.days}
-          tooltip="Remaining days"
+          tooltip={`${isTMinus ? "Remaining" : "Elapsed"} days`}
+          className="px-2"
         />
       );
     if (digits.includes("h"))
       _displays.push(
-        <CounterDisplayNumber num={remaining.hours} tooltip="Remaining hours" />
+        <CounterDisplayNumber
+          key="d"
+          num={remaining.hours}
+          tooltip={`${isTMinus ? "Remaining" : "Elapsed"} hours`}
+          className="px-2"
+        />
       );
     if (digits.includes("m"))
       _displays.push(
         <CounterDisplayNumber
+          key="m"
           num={remaining.minutes}
-          tooltip="Remaining minutes"
+          tooltip={`${isTMinus ? "Remaining" : "Elapsed"} minutes`}
+          className="px-2"
         />
       );
     if (digits.includes("s"))
       _displays.push(
         <CounterDisplayNumber
+          key="s"
           num={remaining.seconds}
-          tooltip="Remaining seconds"
+          tooltip={`${isTMinus ? "Remaining" : "Elapsed"} seconds`}
+          className="px-2"
         />
       );
-    const delimiter = <CounterSegment text={":"} />;
+    const delimiter = <CounterSegment text={":"} className="w-[20px]" />;
     return _displays.length
       ? _displays.reduce(
           (acc, val, index) => [...acc, ...(index > 0 ? [delimiter] : []), val],
           [] as JSX.Element[]
         )
       : _displays;
-  }, [remaining, digits]);
+  }, [remaining, digits, isTMinus]);
 
-  return <div className="flex">{displays}</div>;
+  return (
+    <div className="flex">
+      <CounterSegment text="T" />
+      <CounterSegment text={isTMinus ? "-" : "+"} />
+      {displays}
+    </div>
+  );
 }
