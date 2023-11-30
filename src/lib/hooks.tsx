@@ -39,16 +39,19 @@ export function useRemainingTime() {
 
 interface FormData {
   endDate: DateTime;
+  digits: string[]
 }
 
-function deserialize<K extends keyof FormData>(searchParams: URLSearchParams, key: K): FormData['endDate'] {
+function deserialize<K extends keyof FormData>(searchParams: URLSearchParams, key: K): FormData[K] {
   const value = searchParams.get(key);
   if (key === 'endDate') return value ? DateTime.fromISO(value) : DateTime.now();
+  if (key === 'digits') return value ? value?.split(',') : ['d', 'h', 'm', 's'];
   throw new Error(`this key (${key}) is not supported on FormData`);
 }
 
 function serialize<K extends keyof FormData>(key: K, value: FormData[K]): string {
-  if (key === 'endDate') return value.toISO({ format: 'basic', suppressMilliseconds: true }) ?? new Date().toISOString();
+  if (key === 'endDate') return (value as DateTime).toISO({ format: 'basic', suppressMilliseconds: true }) ?? new Date().toISOString();
+  if (key === 'digits') return (value as string[]).join(',');
   throw new Error(`this key (${key}) is not supported on FormData`);
 }
 
@@ -71,8 +74,12 @@ export function useFormData(): [FormData, (values: Partial<FormData>) => void] {
     return deserialize(searchParams, 'endDate');
   }, [searchParams]);
 
+  const digits = useMemo(() => {
+    return deserialize(searchParams, 'digits');
+  }, [searchParams]);
+
   return [
-    { endDate },
+    { endDate, digits },
     setData
   ]
 }

@@ -1,9 +1,7 @@
-import { Label } from "./ui/label"
 import { Settings2 } from "lucide-react"
-import { useFormData } from "@/lib/hooks"
 import { Button } from "@/components/ui/button"
-import { DateTimePicker } from "./ui/datetime-picker"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
+import { SettingsForm } from "./settings-form"
 
 export function SettingsToggle() {
   return (
@@ -22,15 +20,4 @@ export function SettingsToggle() {
       </DialogContent>
     </Dialog>
   )
-}
-
-function SettingsForm() {
-  const [{ endDate }, setFormData] = useFormData()
-
-  return <form className="flex flex-col gap-4">
-    <Label>Selected an end date</Label>
-    <DateTimePicker date={endDate} setDate={(date) => {
-      setFormData({ endDate: date })
-    }} />
-  </form>
 }
