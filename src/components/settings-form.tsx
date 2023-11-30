@@ -3,6 +3,8 @@ import { Label } from "./ui/label";
 import { FormData } from "@/lib/hooks";
 import { DateTimePicker } from "./ui/datetime-picker";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { Button } from "./ui/button";
+import { uploadDummyImage } from "@/lib/imgur";
 
 export function SettingsForm({
   data,
@@ -14,7 +16,7 @@ export function SettingsForm({
   const { endDate, digits, title } = data;
 
   return (
-    <form className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <Label>Event title</Label>
       <Input
         value={title}
@@ -50,6 +52,7 @@ export function SettingsForm({
           Seconds
         </ToggleGroupItem>
       </ToggleGroup>
-    </form>
+      <Button onClick={uploadDummyImage}>upload image</Button>
+    </div>
   );
 }
