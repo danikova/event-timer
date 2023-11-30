@@ -1,14 +1,14 @@
-import * as React from 'react';
-import { DateTime } from 'luxon';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import * as React from "react";
+import { DateTime } from "luxon";
+import { Calendar as CalendarIcon } from "lucide-react";
 
-import { Button } from './button';
-import { Calendar } from './calendar';
-import { Popover, PopoverContent, PopoverTrigger } from './popover';
-import { cn } from '@/lib/utils';
-import { SelectSingleEventHandler } from 'react-day-picker';
-import { Label } from './label';
-import { Input } from './input';
+import { Button } from "./button";
+import { Calendar } from "./calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { cn } from "@/lib/utils";
+import { SelectSingleEventHandler } from "react-day-picker";
+import { Label } from "./label";
+import { Input } from "./input";
 
 interface DateTimePickerProps {
   date: DateTime;
@@ -16,11 +16,10 @@ interface DateTimePickerProps {
 }
 
 export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
-  const [selectedDateTime, setSelectedDateTime] = React.useState<DateTime>(
-    date
-  );
+  const [selectedDateTime, setSelectedDateTime] =
+    React.useState<DateTime>(date);
 
-  const handleSelect: SelectSingleEventHandler = (day, selected) => {
+  const handleSelect: SelectSingleEventHandler = (_day, selected) => {
     const selectedDay = DateTime.fromJSDate(selected);
     const modifiedDay = selectedDay.set({
       hour: selectedDateTime.hour,
@@ -33,8 +32,8 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
 
   const handleTimeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const { value } = e.target;
-    const hours = Number.parseInt(value.split(':')[0] || '00', 10);
-    const minutes = Number.parseInt(value.split(':')[1] || '00', 10);
+    const hours = Number.parseInt(value.split(":")[0] || "00", 10);
+    const minutes = Number.parseInt(value.split(":")[1] || "00", 10);
     const modifiedDay = selectedDateTime.set({ hour: hours, minute: minutes });
 
     setSelectedDateTime(modifiedDay);
@@ -48,7 +47,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
         <Input
           type="time"
           onChange={handleTimeChange}
-          value={selectedDateTime.toFormat('HH:mm')}
+          value={selectedDateTime.toFormat("HH:mm")}
         />
       </div>
       {!selectedDateTime && <p>Please pick a day.</p>}
@@ -59,15 +58,15 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
     <Popover>
       <PopoverTrigger asChild className="z-10">
         <Button
-          variant={'outline'}
+          variant={"outline"}
           className={cn(
-            'w-[280px] justify-start text-left font-normal',
-            !date && 'text-muted-foreground'
+            "w-[280px] justify-start text-left font-normal",
+            !date && "text-muted-foreground"
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? (
-            selectedDateTime.toFormat('DDD HH:mm')
+            selectedDateTime.toFormat("DDD HH:mm")
           ) : (
             <span>Pick a date</span>
           )}

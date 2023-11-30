@@ -59,9 +59,10 @@ function deserialize<K extends keyof FormData>(
 ): FormData[K] {
   const value = searchParams.get(key);
   if (key === "endDate")
-    return value ? DateTime.fromISO(value) : DateTime.now();
-  if (key === "digits") return value ? value?.split(",") : ["d", "h", "m", "s"];
-  if (key === "title") return value ? value : "";
+    return (value ? DateTime.fromISO(value) : DateTime.now()) as FormData[K];
+  if (key === "digits")
+    return (value ? value?.split(",") : ["d", "h", "m", "s"]) as FormData[K];
+  if (key === "title") return (value ? value : "") as FormData[K];
   throw new Error(`this key (${key}) is not supported on FormData`);
 }
 
