@@ -38,9 +38,10 @@ export function SettingsToggle() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Counter's settings</DialogTitle>
+          <DialogTitle>Timer settings</DialogTitle>
           <DialogDescription className="opacity-50">
-            dummy description
+            Here you can edit some properties for this timer, you can update
+            this instance or create a new timer
           </DialogDescription>
         </DialogHeader>
         <SettingsForm data={combinedData} setData={setDirtyData} />

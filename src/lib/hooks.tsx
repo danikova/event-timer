@@ -13,21 +13,6 @@ export function useRemainingTime() {
 
   useEffect(() => {
     const id = setInterval(() => {
-      if (targetDate < DateTime.now()) {
-        if (
-          remaining.days ||
-          remaining.hours ||
-          remaining.minutes ||
-          remaining.seconds
-        )
-          setRemaining({
-            days: 0,
-            hours: 0,
-            minutes: 0,
-            seconds: 0,
-          });
-        return;
-      }
       const timeDiff = targetDate.diffNow([
         "days",
         "hours",
@@ -35,10 +20,10 @@ export function useRemainingTime() {
         "second",
       ]);
       setRemaining({
-        days: Math.floor(timeDiff.days),
-        hours: Math.floor(timeDiff.hours),
-        minutes: Math.floor(timeDiff.minutes),
-        seconds: Math.floor(timeDiff.seconds),
+        days: Math.floor(Math.abs(timeDiff.days)),
+        hours: Math.floor(Math.abs(timeDiff.hours)),
+        minutes: Math.floor(Math.abs(timeDiff.minutes)),
+        seconds: Math.floor(Math.abs(timeDiff.seconds)),
       });
     }, 1000);
     return () => clearInterval(id);
