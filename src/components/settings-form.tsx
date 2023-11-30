@@ -1,11 +1,17 @@
+import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { useFormData } from "@/lib/hooks";
+import { FormData } from "@/lib/hooks";
 import { DateTimePicker } from "./ui/datetime-picker";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import { Input } from "./ui/input";
 
-export function SettingsForm() {
-  const [{ endDate, digits, title }, setFormData] = useFormData();
+export function SettingsForm({
+  data,
+  setData,
+}: {
+  data: FormData;
+  setData: (data: Partial<FormData>) => void;
+}) {
+  const { endDate, digits, title } = data;
 
   return (
     <form className="flex flex-col gap-4">
@@ -13,14 +19,14 @@ export function SettingsForm() {
       <Input
         value={title}
         onChange={(e) => {
-          setFormData({ title: e.target.value });
+          setData({ title: e.target.value });
         }}
       />
       <Label>Selected an end date</Label>
       <DateTimePicker
         date={endDate}
         setDate={(date) => {
-          setFormData({ endDate: date });
+          setData({ endDate: date });
         }}
       />
       <Label>Toggle digits</Label>
@@ -28,7 +34,7 @@ export function SettingsForm() {
         type="multiple"
         value={digits}
         onValueChange={(value) => {
-          setFormData({ digits: value });
+          setData({ digits: value });
         }}
       >
         <ToggleGroupItem value="d" variant="outline">

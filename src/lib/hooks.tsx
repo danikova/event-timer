@@ -81,22 +81,33 @@ function serialize<K extends keyof FormData>(
   throw new Error(`this key (${key}) is not supported on FormData`);
 }
 
+export function useURLSearchParamsFactory() {
+  const [searchParams] = useSearchParams();
+
+  return useCallback(
+    (values: Partial<FormData>) => {
+      const temp = new URLSearchParams(searchParams);
+      for (const [key, value] of Object.entries(values)) {
+        // @ts-ignore
+        const serializedValue = serialize(key, value);
+        temp.delete(key);
+        if (serializedValue) temp.append(key, serializedValue);
+      }
+      return temp;
+    },
+    [searchParams]
+  );
+}
+
 export function useFormData(): [FormData, (values: Partial<FormData>) => void] {
   const [searchParams, setSearchParams] = useSearchParams();
+  const getNewParams = useURLSearchParamsFactory();
 
   const setData = useCallback(
     (values: Partial<FormData>) => {
-      setSearchParams((old) => {
-        for (const [key, value] of Object.entries(values)) {
-          // @ts-ignore
-          const serializedValue = serialize(key, value);
-          old.delete(key);
-          if (serializedValue) old.append(key, serializedValue);
-        }
-        return old;
-      });
+      setSearchParams(getNewParams(values));
     },
-    [setSearchParams]
+    [getNewParams, setSearchParams]
   );
 
   const endDate = useMemo(() => {
