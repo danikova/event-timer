@@ -4,18 +4,24 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Counter from './App.tsx'
+import App from './App.tsx'
 import ReactDOM from 'react-dom/client'
+import { TooltipProvider } from './components/ui/tooltip.tsx';
+import { ThemeProvider } from './components/theme-provider.tsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Counter />,
+    element: <App />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <TooltipProvider delayDuration={100}>
+        <RouterProvider router={router} />
+      </TooltipProvider>
+    </ThemeProvider>
   </React.StrictMode>,
 )
