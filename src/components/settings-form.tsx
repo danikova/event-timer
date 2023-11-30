@@ -1,5 +1,7 @@
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { Button } from "./ui/button";
+import { Trash } from "lucide-react";
 import { FormData } from "@/lib/hooks";
 import { PictureUpload } from "./picture-upload";
 import { DateTimePicker } from "./ui/datetime-picker";
@@ -57,10 +59,21 @@ export function SettingsForm({
       <div className="flex gap-x-4">
         <Input value={imageId} readOnly={true} />
         <PictureUpload
+          btnText={imageId ? "Replace" : "Upload"}
           onChange={(value) => {
             setData({ ...data, imageId: value });
           }}
         />
+        <Button
+          variant="outline"
+          disabled={!imageId}
+          className="px-[0.6rem]"
+          onClick={() => {
+            setData({ ...data, imageId: "" });
+          }}
+        >
+          <Trash className="h-[1.2rem] w-[1.2rem]" />
+        </Button>
       </div>
     </div>
   );

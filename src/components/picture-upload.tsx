@@ -17,8 +17,10 @@ import { ImgurResponse, imgurBaseUrl, uploadImage } from "@/lib/imgur";
 
 export function PictureUpload({
   onChange,
+  btnText,
 }: {
   onChange?: (filename: string) => void;
+  btnText?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -36,7 +38,7 @@ export function PictureUpload({
       }}
     >
       <DialogTrigger>
-        <Button variant="outline">Replace picture</Button>
+        <Button variant="outline">{btnText}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
