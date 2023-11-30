@@ -9,12 +9,14 @@ import {
 } from "./ui/dialog";
 import _ from "lodash";
 import { Settings2 } from "lucide-react";
+import { useToast } from "./ui/use-toast";
 import { useMemo, useState } from "react";
 import { SettingsForm } from "./settings-form";
 import { Button } from "@/components/ui/button";
 import { FormData, useFormData, useURLSearchParamsFactory } from "@/lib/hooks";
 
 export function SettingsToggle() {
+  const { toast } = useToast();
   const getNewParams = useURLSearchParamsFactory();
   const [data, setData] = useFormData();
   const [dirtyData, setDirtyData] = useState<Partial<FormData>>({});
@@ -50,6 +52,7 @@ export function SettingsToggle() {
               const params = getNewParams(combinedData);
               window.open(`/?${params.toString()}`, "_blank");
               setDirtyData({});
+              toast({ title: "Create new timer" });
             }}
           >
             Create new
@@ -59,6 +62,7 @@ export function SettingsToggle() {
             onClick={() => {
               setData(dirtyData);
               setDirtyData({});
+              toast({ title: "Updating current timer" });
             }}
           >
             Update

@@ -20,14 +20,14 @@ export function SettingsForm({
       <Input
         value={title}
         onChange={(e) => {
-          setData({ title: e.target.value });
+          setData({ ...data, title: e.target.value });
         }}
       />
       <Label>Selected an end date</Label>
       <DateTimePicker
         date={endDate}
         setDate={(date) => {
-          setData({ endDate: date });
+          setData({ ...data, endDate: date });
         }}
       />
       <Label>Toggle digits</Label>
@@ -35,7 +35,7 @@ export function SettingsForm({
         type="multiple"
         value={digits}
         onValueChange={(value) => {
-          setData({ digits: value });
+          setData({ ...data, digits: value });
         }}
       >
         <ToggleGroupItem value="d" variant="outline">
@@ -55,10 +55,10 @@ export function SettingsForm({
         Background picture <span className="opacity-50">(imgur image id)</span>
       </Label>
       <div className="flex gap-x-4">
-        <Input value={imageId} />
+        <Input value={imageId} readOnly={true} />
         <PictureUpload
           onChange={(value) => {
-            setData({ imageId: value });
+            setData({ ...data, imageId: value });
           }}
         />
       </div>
