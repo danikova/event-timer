@@ -1,68 +1,58 @@
 import axios from "axios";
 
 const imgurClientId = "72a7bd26c2e9f2b";
+export const imgurBaseUrl = "https://i.imgur.com/";
 
-// curl --location 'https://api.imgur.com/3/image' \
-// --header 'Authorization: Client-ID {{clientId}}' \
-// --form 'image="R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"'
+export interface ImgurResponse {
+  data: {
+    id: string;
+    title: string | null;
+    description: string | null;
+    datetime: number;
+    type: string;
+    animated: boolean;
+    width: number;
+    height: number;
+    size: number;
+    views: number;
+    bandwidth: number;
+    vote: string | null;
+    favorite: boolean;
+    nsfw: string | null;
+    section: string | null;
+    account_url: string | null;
+    account_id: number;
+    is_ad: boolean;
+    in_most_viral: boolean;
+    has_sound: boolean;
+    tags: string[];
+    ad_type: number;
+    ad_url: string;
+    edited: string;
+    in_gallery: boolean;
+    deletehash: string;
+    name: string;
+    link: string;
+  };
+  success: boolean;
+  status: number;
+}
 
-// {
-//   data: {
-//     id: "ty4B5Cm",
-//     title: null,
-//     description: null,
-//     datetime: 1701353697,
-//     type: "image/gif",
-//     animated: false,
-//     width: 1,
-//     height: 1,
-//     size: 42,
-//     views: 0,
-//     bandwidth: 0,
-//     vote: null,
-//     favorite: false,
-//     nsfw: null,
-//     section: null,
-//     account_url: null,
-//     account_id: 0,
-//     is_ad: false,
-//     in_most_viral: false,
-//     has_sound: false,
-//     tags: [],
-//     ad_type: 0,
-//     ad_url: "",
-//     edited: "0",
-//     in_gallery: false,
-//     deletehash: "XCwt00vq8ulZAgu",
-//     name: "",
-//     link: "https://i.imgur.com/ty4B5Cm.gif",
-//   },
-//   success: true,
-//   status: 200,
-// };
-
-// const dummyFile = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJMYXllcl80IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNS4yNSAyMCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtzdHJva2Utd2lkdGg6MHB4O308L3N0eWxlPjwvZGVmcz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Im0xMy4zNCwxOC4xdi05LjUySDEuOTF2OS41MmgxMS40M20wLTExLjQzYzEuMDUsMCwxLjkxLjg1LDEuOTEsMS45djkuNTJjMCwxLjA1LS44NSwxLjktMS45MSwxLjlIMS45MWMtMS4wNSwwLTEuOTEtLjg1LTEuOTEtMS45di05LjUyYzAtMS4wNS44NS0xLjksMS45MS0xLjloOC41N3YtMS45YzAtMS41OC0xLjI4LTIuODYtMi44Ni0yLjg2cy0yLjg2LDEuMjgtMi44NiwyLjg2aC0xLjkxQzIuODYsMi4xMyw0Ljk5LDAsNy42MiwwczQuNzYsMi4xMyw0Ljc2LDQuNzZ2MS45aC45NW0tNS43Miw4LjU3Yy0xLjA1LDAtMS45MS0uODUtMS45MS0xLjlzLjg1LTEuOSwxLjkxLTEuOSwxLjkxLjg1LDEuOTEsMS45LS44NSwxLjktMS45MSwxLjlaIi8+PC9zdmc+';
-const simpleDummyFile =
-  "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-
-export async function uploadDummyImage() {
+export async function uploadImage(
+  image: File | string
+): Promise<ImgurResponse> {
   const body = new FormData();
-  body.append("image", simpleDummyFile);
-  const res = await axios.post("https://api.imgur.com/3/image", body, {
-    headers: {
-      Authorization: `Client-ID ${imgurClientId}`,
-    },
-  });
+  body.append("image", image);
 
-  // const res = await fetch(
-  //   'https://api.imgur.com/3/image',
-  //   {
-  //     method: 'POST',
-  //     headers: {
-  //       Authorization: `Client-ID ${imgurClientId}`,
-  //     },
-  //     body,
-  //   }
-  // );
-  console.log(res);
+  const res = await axios.post<ImgurResponse>(
+    "https://api.imgur.com/3/image",
+    body,
+    {
+      headers: {
+        Authorization: `Client-ID ${imgurClientId}`,
+      },
+    }
+  );
+
+  return res.data;
 }

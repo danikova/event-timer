@@ -5,6 +5,7 @@ import {
 } from "./components/ui/tooltip";
 import { Title } from "./components/title";
 import { Counter } from "./components/counter";
+import { Toaster } from "./components/ui/toaster";
 import { ModeToggle } from "./components/mode-toggle";
 import { SettingsToggle } from "./components/settings-toggle";
 
@@ -29,6 +30,7 @@ export default function App() {
           <TooltipContent side="left">Change color scheme</TooltipContent>
         </Tooltip>
       </div>
+      <Toaster />
     </>
   );
 }

@@ -1,10 +1,9 @@
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { FormData } from "@/lib/hooks";
+import { PictureUpload } from "./picture-upload";
 import { DateTimePicker } from "./ui/datetime-picker";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import { Button } from "./ui/button";
-import { uploadDummyImage } from "@/lib/imgur";
 
 export function SettingsForm({
   data,
@@ -13,7 +12,7 @@ export function SettingsForm({
   data: FormData;
   setData: (data: Partial<FormData>) => void;
 }) {
-  const { endDate, digits, title } = data;
+  const { endDate, digits, title, imageId } = data;
 
   return (
     <div className="flex flex-col gap-4">
@@ -52,7 +51,17 @@ export function SettingsForm({
           Seconds
         </ToggleGroupItem>
       </ToggleGroup>
-      <Button onClick={uploadDummyImage}>upload image</Button>
+      <Label>
+        Background picture <span className="opacity-50">(imgur image id)</span>
+      </Label>
+      <div className="flex gap-x-4">
+        <Input value={imageId} />
+        <PictureUpload
+          onChange={(value) => {
+            setData({ imageId: value });
+          }}
+        />
+      </div>
     </div>
   );
 }

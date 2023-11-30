@@ -50,7 +50,8 @@ export function useRemainingTime() {
 export interface FormData {
   endDate: DateTime;
   digits: string[];
-  title?: string;
+  title: string;
+  imageId: string;
 }
 
 function deserialize<K extends keyof FormData>(
@@ -63,6 +64,7 @@ function deserialize<K extends keyof FormData>(
   if (key === "digits")
     return (value ? value?.split(",") : ["d", "h", "m", "s"]) as FormData[K];
   if (key === "title") return (value ? value : "") as FormData[K];
+  if (key === "imageId") return (value ? value : "") as FormData[K];
   throw new Error(`this key (${key}) is not supported on FormData`);
 }
 
@@ -79,6 +81,7 @@ function serialize<K extends keyof FormData>(
     );
   if (key === "digits") return (value as string[]).join(",");
   if (key === "title") return value as string;
+  if (key === "imageId") return value as string;
   throw new Error(`this key (${key}) is not supported on FormData`);
 }
 
@@ -123,5 +126,9 @@ export function useFormData(): [FormData, (values: Partial<FormData>) => void] {
     return deserialize(searchParams, "title");
   }, [searchParams]);
 
-  return [{ endDate, digits, title }, setData];
+  const imageId = useMemo(() => {
+    return deserialize(searchParams, "imageId");
+  }, [searchParams]);
+
+  return [{ endDate, digits, title, imageId }, setData];
 }
