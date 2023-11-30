@@ -98,7 +98,7 @@ export function Counter() {
     if (digits.includes("h"))
       _displays.push(
         <CounterDisplayNumber
-          key="d"
+          key="h"
           num={remaining.hours}
           tooltip={`${isTMinus ? "Remaining" : "Elapsed"} hours`}
           className="px-2"
@@ -122,10 +122,21 @@ export function Counter() {
           className="px-2"
         />
       );
-    const delimiter = <CounterSegment text={":"} className="w-[20px]" />;
     return _displays.length
       ? _displays.reduce(
-          (acc, val, index) => [...acc, ...(index > 0 ? [delimiter] : []), val],
+          (acc, val, index) => [
+            ...acc,
+            ...(index > 0
+              ? [
+                  <CounterSegment
+                    key={`del-${index}`}
+                    text={":"}
+                    className="w-[20px]"
+                  />,
+                ]
+              : []),
+            val,
+          ],
           [] as JSX.Element[]
         )
       : _displays;

@@ -31,8 +31,8 @@ export function SettingsToggle() {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button variant={"outline"} size="icon">
+      <DialogTrigger asChild>
+        <Button variant="outline" size="icon" as="div">
           <Settings2 className="h-[1.2rem] w-[1.2rem]" />
         </Button>
       </DialogTrigger>

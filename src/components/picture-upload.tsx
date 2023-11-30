@@ -37,7 +37,7 @@ export function PictureUpload({
         setIsOpen((old) => !old);
       }}
     >
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant="outline">{btnText}</Button>
       </DialogTrigger>
       <DialogContent>
