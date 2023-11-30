@@ -1,21 +1,19 @@
-import { Counter } from "./components/counter";
-import { ModeToggle } from "./components/mode-toggle";
-import { SettingsToggle } from "./components/settings-toggle";
-import { Title } from "./components/title";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "./components/ui/tooltip";
+import { Title } from "./components/title";
+import { Counter } from "./components/counter";
+import { ModeToggle } from "./components/mode-toggle";
+import { SettingsToggle } from "./components/settings-toggle";
 
 export default function App() {
   return (
     <>
       <div className="h-[100vh] w-[100vw] flex flex-col gap-y-10 justify-center items-center">
         <Title />
-        <div className="pb-[5rem]">
-          <Counter />
-        </div>
+        <Counter />
       </div>
       <div className="absolute bottom-4 right-4 flex flex-col gap-y-4">
         <Tooltip>
