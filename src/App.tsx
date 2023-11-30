@@ -1,8 +1,11 @@
+import { useMemo } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "./components/ui/tooltip";
+import { Helmet } from "react-helmet";
+import { useFormData } from "./lib/hooks";
 import { Title } from "./components/title";
 import { Counter } from "./components/counter";
 import { Toaster } from "./components/ui/toaster";
@@ -11,8 +14,17 @@ import { SettingsToggle } from "./components/settings-toggle";
 import { BackgroundImage } from "./components/background-image";
 
 export default function App() {
+  const [{ title: _title }] = useFormData();
+  const title = useMemo(
+    () => "Event Horizon" + (_title ? ` - ${_title}` : ""),
+    [_title]
+  );
+
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <div className="absolute top-0 left-0 h-[100vh] w-[100vw] overflow-hidden flex justify-center items-center opacity-40 z-[-1] blur-sm">
         <BackgroundImage />
       </div>
