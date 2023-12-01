@@ -50,8 +50,12 @@ export function SettingsToggle() {
             variant="outline"
             disabled={isButtonsDisabled}
             onClick={() => {
+              const loc = window.location;
               const params = getNewParams(combinedData);
-              window.open(`/?${params.toString()}`, "_blank");
+              window.open(
+                `${loc.origin}${loc.pathname}?${params.toString()}`,
+                "_blank"
+              );
               setDirtyData({});
               toast({ title: "Create new timer" });
             }}
