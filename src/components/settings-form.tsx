@@ -9,10 +9,10 @@ import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
 export function SettingsForm({
   data,
-  setData,
+  setDirtyData,
 }: {
   data: FormData;
-  setData: (data: Partial<FormData>) => void;
+  setDirtyData: (data: Partial<FormData>) => void;
 }) {
   const { endDate, digits, title, imageId } = data;
 
@@ -22,14 +22,14 @@ export function SettingsForm({
       <Input
         value={title}
         onChange={(e) => {
-          setData({ ...data, title: e.target.value });
+          setDirtyData({ title: e.target.value });
         }}
       />
       <Label>Selected an end date</Label>
       <DateTimePicker
         date={endDate}
         setDate={(date) => {
-          setData({ ...data, endDate: date });
+          setDirtyData({ endDate: date });
         }}
       />
       <Label>Toggle digits</Label>
@@ -37,7 +37,7 @@ export function SettingsForm({
         type="multiple"
         value={digits}
         onValueChange={(value) => {
-          setData({ ...data, digits: value });
+          setDirtyData({ digits: value });
         }}
       >
         <ToggleGroupItem value="d" variant="outline">
@@ -61,7 +61,7 @@ export function SettingsForm({
         <PictureUpload
           btnText={imageId ? "Replace" : "Upload"}
           onChange={(value) => {
-            setData({ ...data, imageId: value });
+            setDirtyData({ imageId: value });
           }}
         />
         <Button
@@ -69,7 +69,7 @@ export function SettingsForm({
           disabled={!imageId}
           className="px-[0.6rem]"
           onClick={() => {
-            setData({ ...data, imageId: "" });
+            setDirtyData({ imageId: "" });
           }}
         >
           <Trash className="h-[1.2rem] w-[1.2rem]" />
