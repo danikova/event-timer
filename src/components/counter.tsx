@@ -22,7 +22,7 @@ function CounterDisplaySingleDigit({ num }: { num: number }) {
   return (
     <div className="w-[45px] h-[5rem] flex flex-col overflow-hidden">
       <div
-        className="transition-[duration] duration-500"
+        className="transition-[margin] duration-500"
         style={{ marginTop: `calc(${-offset} * 5rem)` }}
       >
         {numbers.map((n) => getNumber(n))}
@@ -50,12 +50,16 @@ function CounterDisplayNumber({
 
   return (
     <Tooltip>
-      <TooltipTrigger disabled={!tooltip} className={cn("flex", className)}>
-        {nums.map((num, i) => (
-          <CounterDisplaySingleDigit key={`${i}`} num={num} />
-        ))}
+      <TooltipTrigger disabled={!tooltip} asChild>
+        <div className={cn("flex", className)}>
+          {nums.map((num, i) => (
+            <CounterDisplaySingleDigit key={`${i}`} num={num} />
+          ))}
+        </div>
       </TooltipTrigger>
-      <TooltipContent side="bottom">{tooltip}</TooltipContent>
+      <TooltipContent side="bottom" className="[text-shadow:none]">
+        {tooltip}
+      </TooltipContent>
     </Tooltip>
   );
 }

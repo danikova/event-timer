@@ -1,22 +1,37 @@
 import { Title } from "./title";
-import { useMemo } from "react";
 import { cn } from "../lib/utils";
 import { Counter } from "./counter";
 import { useAtomValue } from "jotai";
 import { useTheme } from "@/lib/theme";
+import { CSSProperties, useMemo } from "react";
 import { dominantColorsAtom } from "../lib/globals";
+import { Hsl } from "@/lib/hue";
+
+function hsla(hsl: Hsl, a = 1.0) {
+  return `${~~(hsl.h * 360)} ${hsl.s * 100}%, ${hsl.l * 100}%, ${a * 100}%`;
+}
 
 export function MainContent({ className }: { className?: string }) {
   const { themeClass } = useTheme();
   const dominantColors = useAtomValue(dominantColorsAtom);
-  const style = useMemo(() => {
-    if (!dominantColors.length) return {};
+  const style = useMemo<CSSProperties>(() => {
     for (const c of dominantColors) {
-      const l = themeClass === "light" ? Math.max(c.l - 0.4, 0) : c.l;
+      const tL =
+        themeClass === "light"
+          ? Math.max(c.l - 0.4, 0)
+          : Math.min(c.l + 0.15, 1);
+
+      const tsL =
+        themeClass !== "light"
+          ? Math.max(c.l - 0.4, 0)
+          : Math.min(c.l + 0.15, 1);
+
       return {
-        color: `hsl(${~~(c.h * 360)} ${c.s * 100}%, ${l * 100}%)`,
+        color: `hsla(${hsla({ ...c, l: tL })})`,
+        textShadow: `4px 4px hsla(${hsla({ ...c, l: tsL })})`,
       };
     }
+    return {};
   }, [themeClass, dominantColors]);
 
   return (
