@@ -11,7 +11,7 @@ import { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../lib/toast";
 import { FileInput } from "./ui/file-input";
 import { ImgurResponse, imgurBaseUrl, uploadImage } from "@/lib/imgur";
 

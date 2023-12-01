@@ -8,8 +8,8 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import _ from "lodash";
+import { useToast } from "../lib/toast";
 import { Settings2 } from "lucide-react";
-import { useToast } from "./ui/use-toast";
 import { useMemo, useState } from "react";
 import { SettingsForm } from "./settings-form";
 import { Button } from "@/components/ui/button";
