@@ -1,3 +1,4 @@
+import { Hsl } from "./hue";
 import { atom } from "jotai";
 
-export const dominantHueAtom = atom<number | null>(null);
+export const dominantColorsAtom = atom<Hsl[]>([]);

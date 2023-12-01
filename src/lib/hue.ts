@@ -1,40 +1,29 @@
-import { kmeans } from "ml-kmeans";
-import { RefObject } from "react";
+const MAX_IMAGE_WORK_SIZE = 128;
 
-export async function getDominantHue(imageRef: RefObject<HTMLImageElement>) {
-  if (!imageRef.current) return null;
+export interface Hsl {
+  h: number;
+  s: number;
+  l: number;
+}
 
-  imageRef.current.crossOrigin = "Anonymous";
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
+export interface HueData {
+  lum: {
+    low: number;
+    high: number;
+    tot: number;
+  };
+  sat: {
+    low: number;
+    high: number;
+    tot: number;
+  };
+  count: number;
+  histo: Uint16Array;
+}
 
-  if (!context) return null;
-
-  const imgNWidth = imageRef.current.naturalWidth;
-  const imgNHeight = imageRef.current.naturalHeight;
-
-  if (imgNWidth === 0 || imgNHeight === 0) return null;
-
-  const scaleFactor = Math.min(500 / Math.max(imgNWidth, imgNHeight), 1);
-
-  canvas.width = imgNWidth * scaleFactor;
-  canvas.height = imgNHeight * scaleFactor;
-
-  context.drawImage(
-    imageRef.current,
-    0,
-    0,
-    imgNWidth,
-    imgNHeight,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-  return await calculateDominantHue(imageData);
+export function calculateDominantColors(hues: HueData[], imageData: ImageData) {
+  generateHistogramFromImageData(hues, imageData);
+  return generateHslValuesFromEvaluatedHueArray(hues);
 }
 
 function rgbToHsl(rgb: [number, number, number]) {
@@ -61,46 +50,96 @@ function rgbToHsl(rgb: [number, number, number]) {
         : (r - g) / d + 4) / 6;
   }
 
-  return [h, s, l];
+  return { h, s, l } as Hsl;
 }
-// Function to get dominant hue from an image
 
-async function calculateDominantHue(imageData: ImageData) {
-  const pixelData = imageData.data;
-  const pixels = [];
+export function getOptimizedImageData(imageRef: HTMLImageElement) {
+  if (!imageRef) throw new Error();
 
-  // Convert RGB pixels to HSL
-  for (let i = 0; i < pixelData.length; i += 4) {
-    pixels.push(rgbToHsl([pixelData[i], pixelData[i + 1], pixelData[i + 2]]));
-  }
+  imageRef.crossOrigin = "Anonymous";
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
 
-  // Use k-means clustering to find dominant hues
-  const k = 5; // You can adjust the number of clusters based on your needs
-  const result = kmeans(pixels, k, {});
+  if (!context) throw new Error();
 
-  // Find the cluster with the largest number of pixels
-  let maxClusterSize = 0;
+  const imgNWidth = imageRef.naturalWidth;
+  const imgNHeight = imageRef.naturalHeight;
 
-  // Count occurrences of each cluster
-  const clusterCount = result.clusters.reduce<{
-    [k in string]: number;
-  }>((count, clusterIndex) => {
-    count[clusterIndex] = (count[clusterIndex] || 0) + 1;
-    return count;
-  }, {});
+  if (imgNWidth === 0 || imgNHeight === 0) throw new Error();
 
-  // Find the cluster with the maximum occurrences
-  const maxClusterIndex = Object.keys(clusterCount).reduce<any>(
-    (maxIndex, clusterIndex) => {
-      if (clusterCount[clusterIndex] > maxClusterSize) {
-        maxClusterSize = clusterCount[clusterIndex];
-        return clusterIndex;
-      }
-      return maxIndex;
-    },
-    null
+  const scaleFactor = Math.min(
+    MAX_IMAGE_WORK_SIZE / Math.max(imgNWidth, imgNHeight),
+    1
   );
 
-  if (!maxClusterIndex) return null;
-  return result.centroids[maxClusterIndex][0]; // H component from HSL
+  canvas.width = imgNWidth * scaleFactor;
+  canvas.height = imgNHeight * scaleFactor;
+
+  context.drawImage(
+    imageRef,
+    0,
+    0,
+    imgNWidth,
+    imgNHeight,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  return context.getImageData(0, 0, canvas.width, canvas.height);
+}
+
+function generateHslValuesFromEvaluatedHueArray(hues: HueData[]) {
+  const hslValues: Hsl[] = [];
+  for (let j = 0; j < hues.length; j += 1) {
+    const hr = hues[j];
+    let wHue = 0;
+    let hueCount = 0;
+    hr.histo[1] += hr.histo[0];
+    for (let i = 1; i < 360; i++) {
+      wHue += i * hr.histo[i];
+      hueCount += hr.histo[i];
+    }
+    const h = wHue / hueCount / 360;
+    const s = hr.sat.tot / hr.count;
+    const l = Math.sqrt(hr.lum.tot / hr.count);
+    hslValues.push({ h, s, l });
+  }
+  return hslValues;
+}
+
+function generateHistogramFromImageData(hues: HueData[], imageData: ImageData) {
+  const pixels = imageData.data;
+  const l = calculateLValue(imageData, pixels);
+
+  hues[0].lum.low = l - 0.3;
+  hues[0].lum.high = l + 0.3;
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    const hsl = rgbToHsl([pixels[i], pixels[i + 1], pixels[i + 2]]);
+    for (let j = 0; j < hues.length; j++) {
+      const hr = hues[j]; // hue range
+      if (hsl.l >= hr.lum.low && hsl.l < hr.lum.high) {
+        if (hsl.s >= hr.sat.low && hsl.s < hr.sat.high) {
+          const histoIndex = ~~(hsl.h * 360);
+          hr.histo[histoIndex] += 1;
+          hr.count += 1;
+          hr.lum.tot += hsl.l * hsl.l;
+          hr.sat.tot += hsl.s;
+        }
+      }
+    }
+  }
+}
+
+function calculateLValue(imageData: ImageData, pixels: Uint8ClampedArray) {
+  let l = 0;
+  const iCount = imageData.width * imageData.height;
+  for (let i = 0; i < pixels.length; i += 4) {
+    const hsl = rgbToHsl([pixels[i], pixels[i + 1], pixels[i + 2]]);
+    l += hsl.l * hsl.l;
+  }
+  l = Math.sqrt(l / iCount);
+  return l;
 }

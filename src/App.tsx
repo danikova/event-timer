@@ -6,10 +6,9 @@ import {
 } from "./components/ui/tooltip";
 import { Helmet } from "react-helmet";
 import { useFormData } from "./lib/hooks";
-import { Title } from "./components/title";
-import { Counter } from "./components/counter";
 import { Toaster } from "./components/ui/toaster";
 import { ModeToggle } from "./components/mode-toggle";
+import { MainContent } from "./components/main-content";
 import { SettingsToggle } from "./components/settings-toggle";
 import { BackgroundImage } from "./components/background-image";
 
@@ -25,13 +24,8 @@ export default function App() {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <div className="absolute top-0 left-0 h-[100vh] w-[100vw] overflow-hidden flex justify-center items-center opacity-40 z-[-1] blur-sm">
-        <BackgroundImage />
-      </div>
-      <div className="h-[100vh] w-[100vw] flex flex-col gap-y-10 justify-center items-center">
-        <Title />
-        <Counter />
-      </div>
+      <BackgroundImage className="absolute top-0 left-0 h-[100vh] w-[100vw] overflow-hidden flex justify-center items-center opacity-40 z-[-1] blur-sm" />
+      <MainContent className="h-[100vh] w-[100vw] flex flex-col gap-y-10 justify-center items-center" />
       <div className="absolute bottom-4 right-4 flex flex-col gap-y-4">
         <Tooltip>
           <TooltipTrigger>

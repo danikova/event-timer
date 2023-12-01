@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { getDominantHue } from "./hue";
 import { useSearchParams } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -117,15 +116,4 @@ export function useFormData(): [FormData, (values: Partial<FormData>) => void] {
   }, [searchParams]);
 
   return [{ endDate, digits, title, imageId }, setData];
-}
-
-export function useHue() {
-  const _getDominantHue = useCallback(
-    (...props: Parameters<typeof getDominantHue>) => {
-      const value = getDominantHue(...props);
-      return value;
-    },
-    []
-  );
-  return { getDominantHue: _getDominantHue };
 }
