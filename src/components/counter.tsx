@@ -22,7 +22,7 @@ function CounterDisplaySingleDigit({ num }: { num: number }) {
   return (
     <div className="w-[45px] h-[5rem] flex flex-col overflow-hidden">
       <div
-        className="transition-all duration-500"
+        className="transition-[duration] duration-500"
         style={{ marginTop: `calc(${-offset} * 5rem)` }}
       >
         {numbers.map((n) => getNumber(n))}

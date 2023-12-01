@@ -20,7 +20,7 @@ export function MainContent({ className }: { className?: string }) {
   }, [themeClass, dominantColors]);
 
   return (
-    <div className={cn(className)} style={style}>
+    <div className={cn(className, "transition-[color]")} style={style}>
       <Title />
       <Counter />
     </div>
