@@ -46,9 +46,10 @@ export function PictureUpload({
           <DialogDescription className="opacity-50">
             Here you can upload new pictures to imgur to use as a background,
             you can use your own picture or an existing one from any url picture
-            <div className="text-orange-400">
+            <br />
+            <span className="text-orange-400">
               WARNING: these pictures will be publicly available after upload
-            </div>
+            </span>
           </DialogDescription>
         </DialogHeader>
         <Label>Picture</Label>
