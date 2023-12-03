@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
@@ -10,16 +12,26 @@ import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 export function SettingsForm({
   data,
   setDirtyData,
+  className,
 }: {
   data: FormData;
   setDirtyData: (data: Partial<FormData>) => void;
+  className?: string;
 }) {
   const { endDate, digits, title, imageId } = data;
+  const [isDateTimeOpen, setIsDateTimeOpen] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      className={cn(
+        isDateTimeOpen && "md:pb-0 pb-[300px]",
+        "flex flex-col gap-4",
+        className
+      )}
+    >
       <Label>Event title</Label>
       <Input
+        autoFocus={false}
         value={title}
         onChange={(e) => {
           setDirtyData({ title: e.target.value });
@@ -30,6 +42,9 @@ export function SettingsForm({
         date={endDate}
         setDate={(date) => {
           setDirtyData({ endDate: date });
+        }}
+        popoverRootProps={{
+          onOpenChange: setIsDateTimeOpen,
         }}
       />
       <Label>Toggle digits</Label>
@@ -57,7 +72,7 @@ export function SettingsForm({
         Background picture <span className="opacity-50">(imgur image id)</span>
       </Label>
       <div className="flex gap-x-4">
-        <Input value={imageId} readOnly={true} />
+        <Input autoFocus={false} value={imageId} readOnly={true} />
         <PictureUpload
           btnText={imageId ? "Replace" : "Upload"}
           onChange={(value) => {

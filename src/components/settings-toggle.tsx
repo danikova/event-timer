@@ -36,7 +36,10 @@ export function SettingsToggle() {
           <Settings2 className="h-[1.2rem] w-[1.2rem]" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        autoFocus={false}
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Timer settings</DialogTitle>
           <DialogDescription className="opacity-50">

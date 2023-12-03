@@ -40,7 +40,10 @@ export function PictureUpload({
       <DialogTrigger asChild>
         <Button variant="outline">{btnText}</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        autoFocus={false}
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Picture upload</DialogTitle>
           <DialogDescription className="opacity-50">
@@ -53,7 +56,6 @@ export function PictureUpload({
           </DialogDescription>
         </DialogHeader>
         <Label>Picture</Label>
-        {/* <Input value="" type="file" /> */}
         <FileInput
           disabled={!!url.length}
           multiple={false}
@@ -67,6 +69,7 @@ export function PictureUpload({
         <div className="italic flex justify-center">OR</div>
         <Label>Url</Label>
         <Input
+          autoFocus={false}
           disabled={!!files.length}
           placeholder="Copy some urls"
           value={url}

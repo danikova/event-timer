@@ -1,15 +1,9 @@
 import { useMemo } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "./components/ui/tooltip";
 import { Helmet } from "react-helmet";
 import { useFormData } from "./lib/hooks";
+import { FloatingMenu } from "./components/floating-menu";
 import { Toaster } from "./components/ui/toaster";
-import { ModeToggle } from "./components/mode-toggle";
 import { MainContent } from "./components/main-content";
-import { SettingsToggle } from "./components/settings-toggle";
 import { BackgroundImage } from "./components/background-image";
 
 export default function App() {
@@ -20,27 +14,16 @@ export default function App() {
   );
 
   return (
-    <>
+    <div className="sm:h-[100lvh] sm:w-[100lvw] h-[100svh] w-[100svw] overflow-hidden">
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <BackgroundImage className="absolute top-0 left-0 h-[100vh] w-[100vw] overflow-hidden flex justify-center items-center opacity-40 z-[-1] blur-sm" />
-      <MainContent className="h-[100vh] w-[100vw] flex flex-col gap-y-10 justify-center items-center" />
-      <div className="absolute bottom-4 right-4 flex flex-col gap-y-4">
-        <Tooltip>
-          <TooltipTrigger>
-            <SettingsToggle />
-          </TooltipTrigger>
-          <TooltipContent side="left">Open settings modal</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger>
-            <ModeToggle />
-          </TooltipTrigger>
-          <TooltipContent side="left">Change color scheme</TooltipContent>
-        </Tooltip>
+      <div className="sm:h-[100lvh] sm:w-[100lvw] sm:rotate-0 sm:mt-0 h-[100svw] w-[100svh] rotate-[90deg] [transform-origin:bottom_left] [margin-top:-50svh]">
+        <BackgroundImage className="absolute top-0 left-0 h-[100%] w-[100%] overflow-hidden flex justify-center items-center opacity-40 z-[-1] blur-sm" />
+        <MainContent className="h-[100%] w-[100%] flex flex-col gap-y-10 justify-center items-center" />
       </div>
+      <FloatingMenu className="fixed bottom-4 right-4 flex flex-col gap-y-4" />
       <Toaster />
-    </>
+    </div>
   );
 }

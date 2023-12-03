@@ -1,21 +1,28 @@
 import * as React from "react";
-import { DateTime } from "luxon";
-import { Calendar as CalendarIcon } from "lucide-react";
-
-import { Button } from "./button";
-import { Calendar } from "./calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { cn } from "@/lib/utils";
-import { SelectSingleEventHandler } from "react-day-picker";
 import { Label } from "./label";
 import { Input } from "./input";
+import { DateTime } from "luxon";
+import { cn } from "@/lib/utils";
+import { Button } from "./button";
+import { Calendar } from "./calendar";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { SelectSingleEventHandler } from "react-day-picker";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 interface DateTimePickerProps {
   date: DateTime;
   setDate: (date: DateTime) => void;
+  popoverRootProps?: React.ComponentPropsWithoutRef<
+    typeof PopoverPrimitive.Root
+  >;
 }
 
-export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
+export function DateTimePicker({
+  date,
+  setDate,
+  popoverRootProps,
+}: DateTimePickerProps) {
   const [selectedDateTime, setSelectedDateTime] =
     React.useState<DateTime>(date);
 
@@ -45,6 +52,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
       <div className="px-4 pt-0 pb-4">
         <Label>Time</Label>
         <Input
+          autoFocus={false}
           type="time"
           onChange={handleTimeChange}
           value={selectedDateTime.toFormat("HH:mm")}
@@ -55,7 +63,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
   );
 
   return (
-    <Popover>
+    <Popover {...popoverRootProps}>
       <PopoverTrigger asChild className="z-10">
         <Button
           variant={"outline"}

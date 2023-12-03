@@ -16,7 +16,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <TooltipProvider delayDuration={100}>
+      <TooltipProvider>
         <RouterProvider router={router} />
       </TooltipProvider>
     </ThemeProvider>
