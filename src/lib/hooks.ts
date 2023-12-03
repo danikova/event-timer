@@ -2,9 +2,9 @@ import { DateTime } from "luxon";
 import { useSearchParams } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export function useRemainingTime() {
+export function useDeltaTime() {
   const [{ endDate: targetDate }] = useFormData();
-  const [remaining, setRemaining] = useState({
+  const [deltaTime, setDeltaTime] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
@@ -19,17 +19,17 @@ export function useRemainingTime() {
         "minutes",
         "second",
       ]);
-      setRemaining({
-        days: Math.floor(Math.abs(timeDiff.days)),
-        hours: Math.floor(Math.abs(timeDiff.hours)),
-        minutes: Math.floor(Math.abs(timeDiff.minutes)),
-        seconds: Math.floor(Math.abs(timeDiff.seconds)),
+      setDeltaTime({
+        days: ~~Math.abs(timeDiff.days),
+        hours: ~~Math.abs(timeDiff.hours),
+        minutes: ~~Math.abs(timeDiff.minutes),
+        seconds: ~~Math.abs(timeDiff.seconds),
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [remaining, targetDate]);
+  }, [deltaTime, targetDate]);
 
-  return remaining;
+  return deltaTime;
 }
 
 export interface FormData {

@@ -50,6 +50,7 @@ export function ScoreWheel({
   max?: number;
 }) {
   nextNum = Math.min(Math.max(nextNum, 0), max);
+  const digitCount = useMemo(() => String(max).length, [max]);
   const params = useMemo(() => getParams(max + 1), [max]);
   const rotationMap = useMemo(() => {
     const nums = Array.from({ length: params.itemCount }).map((_, i) => i);
@@ -84,7 +85,7 @@ export function ScoreWheel({
       className="flex justify-center items-center box-border overflow-hidden"
       style={{
         height: ITEM_HEIGHT,
-        width: ITEM_WIDTH,
+        width: ITEM_WIDTH * digitCount,
       }}
     >
       <div>
@@ -94,7 +95,7 @@ export function ScoreWheel({
             transformOrigin: `50% calc(50% + ${ITEM_HEIGHT / 2}px)`,
             marginTop: `-${ITEM_HEIGHT}px`,
             height: ITEM_HEIGHT,
-            width: ITEM_WIDTH,
+            width: ITEM_WIDTH * digitCount,
             transform: to([styles.rotateX], (x) => {
               return `rotateX(${x}deg)`;
             }),
@@ -107,10 +108,10 @@ export function ScoreWheel({
               style={{
                 transform: `rotateX(${rotation.spawnPosition}deg) translateZ(${params.radius}px)`,
                 height: ITEM_HEIGHT,
-                width: ITEM_WIDTH,
+                width: ITEM_WIDTH * digitCount,
               }}
             >
-              <span>{num}</span>
+              <span>{String(num).padStart(digitCount, "0")}</span>
             </div>
           ))}
         </animated.div>
