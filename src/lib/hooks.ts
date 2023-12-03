@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { useSearchParams } from "react-router-dom";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export function useRemainingTime() {
   const [{ endDate: targetDate }] = useFormData();
@@ -116,4 +116,12 @@ export function useFormData(): [FormData, (values: Partial<FormData>) => void] {
   }, [searchParams]);
 
   return [{ endDate, digits, title, imageId }, setData];
+}
+
+export function usePrev<T>(state: T): T | undefined {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = state;
+  });
+  return ref.current;
 }

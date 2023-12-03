@@ -1,42 +1,18 @@
 import { useMemo } from "react";
 import { DateTime } from "luxon";
 import { cn } from "@/lib/utils";
+import { ScoreWheel } from "./score-wheel";
 import { useFormData, useRemainingTime } from "@/lib/hooks";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-function CounterDisplaySingleDigit({ num }: { num: number }) {
-  const offset = useMemo(() => {
-    if (num < 0) return 0;
-    else if (num > 9) return 9;
-    return num;
-  }, [num]);
-
-  const getNumber = (n: number) => (
-    <div key={n} className="w-[45px] h-[5rem] flex justify-center items-center">
-      <span className="text-[5rem]">{n}</span>
-    </div>
-  );
-
-  return (
-    <div className="w-[45px] h-[5rem] flex flex-col overflow-hidden">
-      <div
-        className="transition-[margin] duration-500"
-        style={{ marginTop: `calc(${-offset} * 5rem)` }}
-      >
-        {numbers.map((n) => getNumber(n))}
-      </div>
-    </div>
-  );
-}
-
 function CounterDisplayNumber({
   num,
+  max,
   tooltip,
   className,
 }: {
   num: number;
+  max?: number[];
   tooltip?: string;
   className?: string;
 }) {
@@ -53,7 +29,7 @@ function CounterDisplayNumber({
       <TooltipTrigger disabled={!tooltip} asChild>
         <div className={cn("flex", className)}>
           {nums.map((num, i) => (
-            <CounterDisplaySingleDigit key={`${i}`} num={num} />
+            <ScoreWheel key={`${i}`} num={num} max={max ? max[i] : 9} />
           ))}
         </div>
       </TooltipTrigger>
@@ -104,6 +80,7 @@ export function Counter() {
         <CounterDisplayNumber
           key="h"
           num={remaining.hours}
+          max={[2, 9]}
           tooltip={`${isTMinus ? "Remaining" : "Elapsed"} hours`}
           className="px-2"
         />
@@ -113,6 +90,7 @@ export function Counter() {
         <CounterDisplayNumber
           key="m"
           num={remaining.minutes}
+          max={[5, 9]}
           tooltip={`${isTMinus ? "Remaining" : "Elapsed"} minutes`}
           className="px-2"
         />
@@ -122,6 +100,7 @@ export function Counter() {
         <CounterDisplayNumber
           key="s"
           num={remaining.seconds}
+          max={[5, 9]}
           tooltip={`${isTMinus ? "Remaining" : "Elapsed"} seconds`}
           className="px-2"
         />
