@@ -72,7 +72,7 @@ export function SettingsForm({
         Background picture <span className="opacity-50">(imgur image id)</span>
       </Label>
       <div className="flex gap-x-4">
-        <Input autoFocus={false} value={imageId} readOnly={true} />
+        <Input autoFocus={false} value={imageId} />
         <PictureUpload
           btnText={imageId ? "Replace" : "Upload"}
           onChange={(value) => {
