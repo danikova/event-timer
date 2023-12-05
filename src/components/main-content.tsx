@@ -4,6 +4,7 @@ import { cn } from "../lib/utils";
 import { Counter } from "./counter";
 import { useAtomValue } from "jotai";
 import { Helmet } from "react-helmet";
+import { Github } from "lucide-react";
 import { useTheme } from "@/lib/theme";
 import { CSSProperties, useMemo } from "react";
 import { dominantColorsAtom } from "../lib/globals";
@@ -31,7 +32,7 @@ export function MainContent({ className }: { className?: string }) {
 
       return {
         "--foreground": `${hsl({ ...c, l: tL })}`,
-        color: `hsl(${hsl({ ...c, l: tL })})`,
+        color: `hsl(var(--foreground)))`,
         textShadow: `4px 4px hsl(${hsl({ ...c, l: tsL })})`,
       };
     }
@@ -48,9 +49,14 @@ export function MainContent({ className }: { className?: string }) {
           }
         />
       </Helmet>
-      <LogoSVG className="fixed w-[100px] top-4 left-4 stroke-[hsl(var(--foreground))] opacity-10 hover:opacity-80 transition-[opacity] duration-300 select-none" />
+      <a href="https://danikova.github.io/event-horizon/">
+        <LogoSVG className="fixed w-[100px] top-4 left-4 stroke-[hsl(var(--foreground))] opacity-10 hover:opacity-80 transition-[opacity] duration-300 select-none" />
+      </a>
       <Title />
       <Counter />
+      <a href="https://github.com/danikova/event-horizon">
+        <Github className="fixed sm:top-4 sm:right-4 max-sm:bottom-4 max-sm:left-4 opacity-10 hover:opacity-80 transition-[opacity] duration-300 select-none" />
+      </a>
     </div>
   );
 }
