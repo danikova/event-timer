@@ -51,7 +51,10 @@ export function Counter() {
               <DaysScrollWheel days={deltaTime.days} />
             </div>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="[text-shadow:none]">
+          <TooltipContent
+            side="bottom"
+            className="[text-shadow:none] max-sm:hidden"
+          >
             {isTMinus ? "Remaining" : "Elapsed"} days
           </TooltipContent>
         </Tooltip>
@@ -64,7 +67,10 @@ export function Counter() {
               <ScoreWheel num={deltaTime.hours} max={23} />
             </div>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="[text-shadow:none]">
+          <TooltipContent
+            side="bottom"
+            className="[text-shadow:none] max-sm:hidden"
+          >
             {isTMinus ? "Remaining" : "Elapsed"} hours
           </TooltipContent>
         </Tooltip>
@@ -77,7 +83,10 @@ export function Counter() {
               <ScoreWheel num={deltaTime.minutes} max={59} />
             </div>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="[text-shadow:none]">
+          <TooltipContent
+            side="bottom"
+            className="[text-shadow:none] max-sm:hidden"
+          >
             {isTMinus ? "Remaining" : "Elapsed"} minutes
           </TooltipContent>
         </Tooltip>
@@ -90,7 +99,10 @@ export function Counter() {
               <ScoreWheel num={deltaTime.seconds} max={59} />
             </div>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="[text-shadow:none]">
+          <TooltipContent
+            side="bottom"
+            className="[text-shadow:none] max-sm:hidden"
+          >
             {isTMinus ? "Remaining" : "Elapsed"} seconds
           </TooltipContent>
         </Tooltip>
