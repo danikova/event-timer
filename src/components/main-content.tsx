@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet";
 import { useTheme } from "@/lib/theme";
 import { CSSProperties, useMemo } from "react";
 import { dominantColorsAtom } from "../lib/globals";
-import LogoSVG from "../../assets/event-horizon-logo-min-rotated.svg?react";
+import LogoSVG from "../../public/event-horizon-logo-min-rotated.svg?react";
 
 function hsl(hsl: Hsl) {
   // return '222.2 84% 4.9%';
