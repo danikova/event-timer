@@ -1,0 +1,32 @@
+{
+  "theme_color": "#05014a",
+  "background_color": "#000",
+  "display": "minimal-ui",
+  "scope": "/event-horizon/",
+  "start_url": "/event-horizon/",
+  "name": "Event Horizon",
+  "short_name": "Event Horizon",
+  "description": "You can wait for any event or measure elapsed time.",
+  "icons": [
+    {
+      "src": "/event-horizon/assets/app/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/event-horizon/assets/app/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/event-horizon/assets/app/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/event-horizon/assets/app/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

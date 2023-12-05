@@ -5,6 +5,7 @@ import react from "@vitejs/plugin-react-swc";
 
 export default defineConfig({
   base: "/event-horizon/",
+  publicDir: "../assets/",
   plugins: [react(), svgr()],
   resolve: {
     alias: {
