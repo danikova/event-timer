@@ -2,6 +2,12 @@ import { DateTime } from "luxon";
 import { useSearchParams } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+function getStartOffset() {
+  const offsetMs = DateTime.utc().millisecond;
+  if (offsetMs < 500) return 500 - offsetMs;
+  return 1500 - offsetMs;
+}
+
 export function useDeltaTime() {
   const [{ endDate: targetDate }] = useFormData();
   const [deltaTime, setDeltaTime] = useState({
@@ -12,7 +18,9 @@ export function useDeltaTime() {
   });
 
   useEffect(() => {
-    const id = setInterval(() => {
+    const ids: NodeJS.Timeout[] = [];
+
+    async function deltaUpdate() {
       const timeDiff = targetDate.diffNow([
         "days",
         "hours",
@@ -25,9 +33,20 @@ export function useDeltaTime() {
         minutes: ~~Math.abs(timeDiff.minutes),
         seconds: ~~Math.abs(timeDiff.seconds),
       });
-    }, 1000);
-    return () => clearInterval(id);
-  }, [deltaTime, targetDate]);
+    }
+
+    ids.push(
+      setTimeout(() => {
+        ids.push(setInterval(deltaUpdate, 1000));
+      }, getStartOffset())
+    );
+
+    return () => {
+      for (const id of ids) {
+        clearInterval(id);
+      }
+    };
+  }, [targetDate]);
 
   return deltaTime;
 }
