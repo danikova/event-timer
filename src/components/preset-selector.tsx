@@ -20,29 +20,14 @@ export function PresetSelector({ className }: { className?: string }) {
   const [history, setHistory] = usePresetHistory();
   const historyMap = useMemo(() => {
     const _historyMap: {
-      [k in string]: {
-        item: HistoryItem;
-        originalIndex: number;
-      };
+      [k in string]: HistoryItem;
     } = {};
     for (let i = 0; i < history.length; i++) {
       const item = history[i];
-      _historyMap[item.title] = {
-        item,
-        originalIndex: i,
-      };
+      _historyMap[item.title] = item;
     }
     return _historyMap;
   }, [history]);
-  const sortedHistory = useMemo(
-    () =>
-      history.sort((a, b) => {
-        if (a.date > b.date) return -1;
-        else if (a.date < b.date) return 1;
-        else return 0;
-      }),
-    [history]
-  );
 
   useEffect(() => {
     if (data.title) setSelectedValue(data.title);
@@ -60,9 +45,9 @@ export function PresetSelector({ className }: { className?: string }) {
             setSearchParams(new URLSearchParams());
           } else {
             setSelectedValue(value);
-            const h = historyMap[value];
-            if (h && h.item) {
-              setSearchParams(new URLSearchParams(h.item.searchParams));
+            const item = historyMap[value];
+            if (item) {
+              setSearchParams(new URLSearchParams(item.searchParams));
             }
           }
         }}
@@ -71,12 +56,14 @@ export function PresetSelector({ className }: { className?: string }) {
           <SelectValue placeholder="Select a preset" />
         </SelectTrigger>
         <SelectContent>
-          {sortedHistory.map((h) => {
-            return (
-              <SelectItem key={h.title} value={h.title}>
-                {h.title}
-              </SelectItem>
-            );
+          {history.map((h) => {
+            if (h.title)
+              return (
+                <SelectItem key={h.title} value={h.title}>
+                  {h.title}
+                </SelectItem>
+              );
+            return null;
           })}
           <SelectItem value={CREATE_NEW_VALUE}>Create new</SelectItem>
         </SelectContent>
@@ -86,13 +73,14 @@ export function PresetSelector({ className }: { className?: string }) {
         className="px-3"
         disabled={!selectedValue || selectedValue === CREATE_NEW_VALUE}
         onClick={() => {
-          const h = historyMap[selectedValue];
-          if (h && h.item) {
+          const item = historyMap[selectedValue];
+          if (item) {
             setSelectedValue("");
             setSearchParams(new URLSearchParams());
-            setHistory((oldHistory) => [
-              ...(oldHistory?.splice(h.originalIndex, 1) ?? []),
-            ]);
+            setHistory(
+              (oldHistory) =>
+                oldHistory?.filter((item) => item.title !== data.title) ?? []
+            );
           }
         }}
       >

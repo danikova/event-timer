@@ -171,40 +171,48 @@ export const options = {
   },
 };
 
+const MAX_HISTORY_LEN = 5;
+
 export function usePresetHistory() {
-  const { data } = useFormData();
-  const [searchParams] = useSearchParams();
+  const { data, searchParams } = useFormData();
   const [history, setHistory] = useLocalStorage<HistoryItem[]>(
     "history",
     [],
     options
   );
+  const prevSearchParams = usePrev(searchParams);
 
   useEffect(() => {
-    if (data.title) {
+    if (searchParams !== prevSearchParams && data.title) {
       setHistory((oldHistory) => {
-        const newHistory = _.cloneDeep(oldHistory ?? []);
-        let found = false;
-        for (let i = 0; i < newHistory.length ?? 0; i++) {
-          const item = newHistory[i];
-          if (item.title === data.title) {
-            item.date = DateTime.now();
-            item.title = data.title;
-            item.searchParams = searchParams.toString();
-            found = true;
-            break;
-          }
-        }
-        if (!found)
+        const newHistory = _.cloneDeep(oldHistory ?? [])
+          .sort((a, b) => {
+            if (a.date > b.date) return -1;
+            else if (a.date < b.date) return 1;
+            else return 0;
+          })
+          .slice(0, MAX_HISTORY_LEN);
+        const existingItem = newHistory.find(
+          (item) => item.title === data.title
+        );
+
+        if (existingItem) {
+          existingItem.date = DateTime.now();
+          existingItem.title = data.title;
+          existingItem.searchParams = searchParams.toString();
+        } else {
+          if (newHistory.length >= MAX_HISTORY_LEN) newHistory.splice(-1, 1);
           newHistory.push({
             date: DateTime.now(),
             title: data.title,
             searchParams: searchParams.toString(),
           });
+        }
         return newHistory;
       });
     }
-  }, [searchParams]); // eslint-disable-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   return [history, setHistory] as const;
 }
