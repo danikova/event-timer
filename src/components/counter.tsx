@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { DateTime } from "luxon";
 import { cn } from "@/lib/utils";
 import { ScoreWheel } from "./score-wheel";
-import { useFormData, useDeltaTime } from "@/lib/hooks";
+import { useFormData, useDeltaTimeNow } from "@/lib/hooks";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 function DaysScrollWheel({ days }: { days: number }) {
@@ -37,9 +37,11 @@ function TextSegment({
 }
 
 export function Counter() {
-  const [{ endDate, digits }] = useFormData();
+  const {
+    data: { endDate, digits },
+  } = useFormData();
   const isTMinus = useMemo(() => endDate > DateTime.now(), [endDate]);
-  const deltaTime = useDeltaTime();
+  const deltaTime = useDeltaTimeNow(endDate);
 
   const displays = useMemo(() => {
     const _displays = [];

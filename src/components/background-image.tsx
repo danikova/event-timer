@@ -24,7 +24,9 @@ const hues = [
 ];
 
 export function BackgroundImage({ className }: { className?: string }) {
-  const [{ imageId }] = useFormData();
+  const {
+    data: { imageId },
+  } = useFormData();
   const imageRef = useRef<HTMLImageElement>(null);
   const setDominantHue = useSetAtom(dominantColorsAtom);
 

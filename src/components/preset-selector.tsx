@@ -7,17 +7,15 @@ import {
 } from "./ui/select";
 import { cn } from "../lib/utils";
 import { Trash } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { Button } from "./ui/button";
 import { useEffect, useMemo, useState } from "react";
 import { HistoryItem, useFormData, usePresetHistory } from "@/lib/hooks";
-import { Button } from "./ui/button";
 
 const CREATE_NEW_VALUE = "_create_new_";
 
 export function PresetSelector({ className }: { className?: string }) {
   const [selectedValue, setSelectedValue] = useState("");
-  const [data] = useFormData();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { data, searchParams, setSearchParams } = useFormData();
 
   const [history, setHistory] = usePresetHistory();
   const historyMap = useMemo(() => {

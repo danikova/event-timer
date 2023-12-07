@@ -8,7 +8,9 @@ import { FloatingMenu } from "./components/floating-menu";
 import { BackgroundImage } from "./components/background-image";
 
 export default function App() {
-  const [{ title: _title }] = useFormData();
+  const {
+    data: { title: _title },
+  } = useFormData();
   const title = useMemo(() => (_title ? _title : "temporary timer"), [_title]);
 
   return (

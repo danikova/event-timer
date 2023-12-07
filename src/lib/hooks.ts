@@ -10,8 +10,7 @@ function getStartOffset() {
   return 1500 - offsetMs;
 }
 
-export function useDeltaTime() {
-  const [{ endDate: targetDate }] = useFormData();
+export function useDeltaTimeNow(targetDate: DateTime) {
   const [deltaTime, setDeltaTime] = useState({
     days: 0,
     hours: 0,
@@ -91,10 +90,10 @@ function serialize<K extends keyof FormData>(
   throw new Error(`this key (${key}) is not supported on FormData`);
 }
 
-export function useURLSearchParamsFactory() {
-  const [searchParams] = useSearchParams();
+export function useFormData() {
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  return useCallback(
+  const generateNewParams = useCallback(
     (values: Partial<FormData>) => {
       const temp = new URLSearchParams(searchParams);
       for (const [key, value] of Object.entries(values)) {
@@ -107,36 +106,31 @@ export function useURLSearchParamsFactory() {
     },
     [searchParams]
   );
-}
-
-export function useFormData(): [FormData, (values: Partial<FormData>) => void] {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const getNewParams = useURLSearchParamsFactory();
 
   const setData = useCallback(
     (values: Partial<FormData>) => {
-      setSearchParams(getNewParams(values));
+      setSearchParams(generateNewParams(values));
     },
-    [getNewParams, setSearchParams]
+    [generateNewParams, setSearchParams]
   );
 
-  const endDate = useMemo(() => {
-    return deserialize(searchParams, "endDate");
-  }, [searchParams]);
+  const data = useMemo<FormData>(
+    () => ({
+      endDate: deserialize(searchParams, "endDate"),
+      digits: deserialize(searchParams, "digits"),
+      title: deserialize(searchParams, "title"),
+      imageId: deserialize(searchParams, "imageId"),
+    }),
+    [searchParams]
+  );
 
-  const digits = useMemo(() => {
-    return deserialize(searchParams, "digits");
-  }, [searchParams]);
-
-  const title = useMemo(() => {
-    return deserialize(searchParams, "title");
-  }, [searchParams]);
-
-  const imageId = useMemo(() => {
-    return deserialize(searchParams, "imageId");
-  }, [searchParams]);
-
-  return [{ endDate, digits, title, imageId }, setData];
+  return {
+    data,
+    setData,
+    searchParams,
+    setSearchParams,
+    generateNewParams,
+  };
 }
 
 export function usePrev<T>(state: T): T | undefined {
@@ -178,7 +172,7 @@ export const options = {
 };
 
 export function usePresetHistory() {
-  const [data] = useFormData();
+  const { data } = useFormData();
   const [searchParams] = useSearchParams();
   const [history, setHistory] = useLocalStorage<HistoryItem[]>(
     "history",

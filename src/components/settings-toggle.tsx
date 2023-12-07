@@ -13,12 +13,11 @@ import { Settings2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { SettingsForm } from "./settings-form";
 import { Button } from "@/components/ui/button";
-import { FormData, useFormData, useURLSearchParamsFactory } from "@/lib/hooks";
+import { FormData, useFormData } from "@/lib/hooks";
 
 export function SettingsToggle() {
   const { toast } = useToast();
-  const getNewParams = useURLSearchParamsFactory();
-  const [data, setData] = useFormData();
+  const { data, setData, generateNewParams } = useFormData();
   const [dirtyData, setDirtyData] = useState<Partial<FormData>>({});
   const combinedData = useMemo<FormData>(
     () => _.defaults(_.cloneDeep(dirtyData), data),
@@ -70,7 +69,7 @@ export function SettingsToggle() {
               disabled={isButtonsDisabled}
               onClick={() => {
                 const loc = window.location;
-                const params = getNewParams(combinedData);
+                const params = generateNewParams(combinedData);
                 window.open(
                   `${loc.origin}${loc.pathname}?${params.toString()}`,
                   "_blank"
