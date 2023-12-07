@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 const MAX_IMAGE_WORK_SIZE = 128;
 
 export interface Hsl {
@@ -22,8 +24,9 @@ export interface HueData {
 }
 
 export function calculateDominantColors(hues: HueData[], imageData: ImageData) {
-  generateHistogramFromImageData(hues, imageData);
-  return generateHslValuesFromEvaluatedHueArray(hues);
+  const _hues = _.cloneDeep(hues);
+  generateHistogramFromImageData(_hues, imageData);
+  return generateHslValuesFromEvaluatedHueArray(_hues);
 }
 
 function rgbToHsl(rgb: [number, number, number]) {

@@ -45,7 +45,7 @@ export function BackgroundImage({ className }: { className?: string }) {
         <img
           src={`${imgurBaseUrl}${imageId}`}
           className={cn(
-            "w-[100%] h-[100%] object-cover block duration-300 animate-in fade-in",
+            "w-[100%] h-[100%] object-cover block [animation-duration:600ms] animate-in fade-in",
             !show && "hidden"
           )}
           onError={() => setShow(false)}
