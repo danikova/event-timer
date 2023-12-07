@@ -6,7 +6,7 @@ export function Title() {
   } = useFormData();
   return (
     title && (
-      <h3 className="sm:text-[min(8vw,10rem)] text-[15vmin] italic whitespace-nowrap">
+      <h3 className="sm:text-[min(8vw,10rem)] text-[15vmin] italic whitespace-nowrap animate-fade-up animate-duration-300 animate-delay-0 animate-ease-in-out">
         {title}
       </h3>
     )
