@@ -57,7 +57,7 @@ export function MainContent({ className }: { className?: string }) {
         <LogoSVG className="fixed w-[100px] top-4 left-4 stroke-[hsl(var(--foreground))] opacity-10 hover:opacity-80 transition-[opacity] duration-300 select-none" />
       </a>
       <Title />
-      <Counter />
+      <Counter className="select-none" />
       <a href="https://github.com/danikova/event-horizon">
         <Github className="fixed sm:top-4 right-4 max-sm:bottom-4 opacity-10 hover:opacity-80 transition-[opacity] duration-300 select-none" />
       </a>

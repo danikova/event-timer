@@ -36,7 +36,7 @@ function TextSegment({
   );
 }
 
-export function Counter() {
+export function Counter({ className }: { className?: string }) {
   const {
     data: { endDate, digits },
   } = useFormData();
@@ -130,7 +130,7 @@ export function Counter() {
   }, [deltaTime, digits, isTMinus]);
 
   return (
-    <div className="flex">
+    <div className={cn("flex", className)}>
       <TextSegment text="T" />
       <TextSegment text={isTMinus ? "-" : "+"} />
       {displays}
