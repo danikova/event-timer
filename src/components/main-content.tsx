@@ -8,10 +8,9 @@ import { Github } from "lucide-react";
 import { useTheme } from "@/lib/theme";
 import { CSSProperties, useMemo } from "react";
 import { dominantColorsAtom } from "../lib/globals";
-import LogoSVG from "../../public/event-horizon-logo-min-rotated.svg?react";
+import LogoSVG from "../assets/event-horizon-logo-min-rotated.svg?react";
 
 function hsl(hsl: Hsl) {
-  // return '222.2 84% 4.9%';
   return `${~~(hsl.h * 360)} ${~~(hsl.s * 100)}% ${~~(hsl.l * 100)}%`;
 }
 
@@ -19,7 +18,9 @@ export function MainContent({ className }: { className?: string }) {
   const { themeClass } = useTheme();
   const dominantColors = useAtomValue(dominantColorsAtom);
   const style = useMemo<CSSProperties>(() => {
-    for (const c of dominantColors) {
+    if (dominantColors.length) {
+      const c = dominantColors[0];
+
       const tL =
         themeClass === "light"
           ? Math.max(c.l - 0.4, 0)
@@ -55,7 +56,7 @@ export function MainContent({ className }: { className?: string }) {
       <Title />
       <Counter />
       <a href="https://github.com/danikova/event-horizon">
-        <Github className="fixed sm:top-4 sm:right-4 max-sm:bottom-4 max-sm:left-4 opacity-10 hover:opacity-80 transition-[opacity] duration-300 select-none" />
+        <Github className="fixed sm:top-4 right-4 max-sm:bottom-4 opacity-10 hover:opacity-80 transition-[opacity] duration-300 select-none" />
       </a>
     </div>
   );

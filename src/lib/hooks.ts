@@ -1,4 +1,6 @@
+import _ from "lodash";
 import { DateTime } from "luxon";
+import useLocalStorage from "use-local-storage";
 import { useSearchParams } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -143,4 +145,72 @@ export function usePrev<T>(state: T): T | undefined {
     ref.current = state;
   });
   return ref.current;
+}
+
+export interface HistoryItem {
+  date: DateTime;
+  title: string;
+  searchParams: string;
+}
+
+export const options = {
+  serializer: (list: HistoryItem[] | undefined) => {
+    if (list) {
+      const _list = _.cloneDeep<any>(list);
+      for (const item of _list) {
+        if (item.date instanceof DateTime) item.date = item.date.toISO();
+      }
+      return JSON.stringify(_list);
+    }
+    return JSON.stringify([]);
+  },
+  parser: (str: string) => {
+    try {
+      const list = JSON.parse(str);
+      for (const item of list) {
+        item.date = DateTime.fromISO(item.date);
+      }
+      return list as HistoryItem[];
+    } catch (e) {
+      return [];
+    }
+  },
+};
+
+export function usePresetHistory() {
+  const [data] = useFormData();
+  const [searchParams] = useSearchParams();
+  const [history, setHistory] = useLocalStorage<HistoryItem[]>(
+    "history",
+    [],
+    options
+  );
+
+  useEffect(() => {
+    if (data.title) {
+      setHistory((oldHistory) => {
+        const newHistory = _.cloneDeep(oldHistory ?? []);
+        let found = false;
+        for (let i = 0; i < newHistory.length ?? 0; i++) {
+          const item = newHistory[i];
+          if (item.title === data.title) {
+            item.date = DateTime.now();
+            item.title = data.title;
+            item.searchParams = searchParams.toString();
+            found = true;
+            break;
+          }
+        }
+        if (!found)
+          newHistory.push({
+            date: DateTime.now(),
+            title: data.title,
+            searchParams: searchParams.toString(),
+          });
+        return newHistory;
+      });
+    }
+  }, [searchParams]); // eslint-disable-line
+
+  return [history, setHistory] as const;
 }
