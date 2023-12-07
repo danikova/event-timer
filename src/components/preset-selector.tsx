@@ -59,13 +59,19 @@ export function PresetSelector({ className }: { className?: string }) {
           {history.map((h) => {
             if (h.title)
               return (
-                <SelectItem key={h.title} value={h.title}>
+                <SelectItem
+                  key={h.title}
+                  value={h.title}
+                  className="cursor-pointer"
+                >
                   {h.title}
                 </SelectItem>
               );
             return null;
           })}
-          <SelectItem value={CREATE_NEW_VALUE}>Create new</SelectItem>
+          <SelectItem value={CREATE_NEW_VALUE} className="cursor-pointer">
+            Create new
+          </SelectItem>
         </SelectContent>
       </Select>
       <Button

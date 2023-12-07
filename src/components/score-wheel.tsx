@@ -1,11 +1,12 @@
+import { cn } from "@/lib/utils";
 import { usePrev } from "../lib/hooks";
 import { useEffect, useMemo } from "react";
 import { animated, useSpring, to } from "@react-spring/web";
 
 const OFFSET = -0.1;
 const ITEM_HEIGHT = 80;
-/* keep ~80x45 aspect ratio */
-const ITEM_WIDTH = ITEM_HEIGHT * 0.56;
+/* keep ~80x48 aspect ratio */
+const ITEM_WIDTH = Math.ceil(ITEM_HEIGHT * 0.6);
 
 type RotationMap = {
   [k in number]: {
@@ -101,9 +102,9 @@ export function ScoreWheel({
             }),
           }}
         >
-          {Object.entries(rotationMap).map(([num, rotation]) => (
+          {Object.entries(rotationMap).map(([n, rotation]) => (
             <div
-              key={`${num}`}
+              key={`${n}`}
               className="flex justify-center items-center h-[100%] w-[100%] text-[5rem] absolute top-[50%] box-border [backface-visibility:hidden]"
               style={{
                 transform: `rotateX(${rotation.spawnPosition}deg) translateZ(${params.radius}px)`,
@@ -111,7 +112,13 @@ export function ScoreWheel({
                 width: ITEM_WIDTH * digitCount,
               }}
             >
-              <span>{String(num).padStart(digitCount, "0")}</span>
+              <span
+                className={cn(
+                  n == `${nextNum}` && "[backface-visibility:visible]"
+                )}
+              >
+                {String(n).padStart(digitCount, "0")}
+              </span>
             </div>
           ))}
         </animated.div>

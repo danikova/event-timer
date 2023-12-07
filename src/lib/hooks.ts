@@ -36,6 +36,7 @@ export function useDeltaTimeNow(targetDate: DateTime) {
       });
     }
 
+    deltaUpdate();
     ids.push(
       setTimeout(() => {
         ids.push(setInterval(deltaUpdate, 1000));

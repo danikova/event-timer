@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils";
 import { useSetAtom } from "jotai";
+import { v4 as uuidv4 } from "uuid";
 import { useFormData } from "@/lib/hooks";
 import { imgurBaseUrl } from "@/lib/imgur";
+import { useEffect, useState } from "react";
 import { dominantColorsAtom } from "@/lib/globals";
-import { useEffect, useRef, useState } from "react";
 import { getOptimizedImageData, calculateDominantColors } from "@/lib/hue";
 
 const hues = [
@@ -27,31 +28,37 @@ export function BackgroundImage({ className }: { className?: string }) {
   const {
     data: { imageId },
   } = useFormData();
-  const imageRef = useRef<HTMLImageElement>(null);
   const setDominantHue = useSetAtom(dominantColorsAtom);
 
   const [show, setShow] = useState(true);
+  const [imgKey, setImgKey] = useState(uuidv4());
 
   useEffect(() => {
     setShow(true);
-  }, [imageId]);
+    setDominantHue([]);
+    setImgKey(uuidv4());
+  }, [imageId, setDominantHue]);
 
   return (
     imageId && (
-      <div className={cn(className)}>
+      <div key={imgKey} className={cn(className)}>
         <img
-          style={{ display: show ? "block" : "none" }}
-          ref={imageRef}
           src={`${imgurBaseUrl}${imageId}`}
-          className="w-[100%] h-[100%] object-cover"
+          className={cn(
+            "w-[100%] h-[100%] object-cover block duration-300 animate-in fade-in",
+            !show && "hidden"
+          )}
           onError={() => setShow(false)}
-          onLoad={() => {
-            setShow(true);
-            try {
-              // @ts-ignore
-              const imgData = getOptimizedImageData(imageRef.current);
-              setDominantHue(calculateDominantColors(hues, imgData));
-            } catch (e) {} // eslint-disable-line
+          onLoad={(e) => {
+            setTimeout(() => {
+              try {
+                const imgData = getOptimizedImageData(
+                  e.target as HTMLImageElement
+                );
+                const hslColors = calculateDominantColors(hues, imgData);
+                setDominantHue(hslColors);
+              } catch (e) {} // eslint-disable-line
+            }, 300);
           }}
         />
       </div>
