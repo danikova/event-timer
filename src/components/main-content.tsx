@@ -33,7 +33,7 @@ export function MainContent({ className }: { className?: string }) {
 
       return {
         "--foreground": `${hsl({ ...c, l: tL })}`,
-        color: `hsl(var(--foreground)))`,
+        color: `hsl(var(--foreground))`,
         textShadow: `4px 4px hsl(${hsl({ ...c, l: tsL })})`,
       };
     }
