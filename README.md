@@ -1,35 +1,68 @@
 # Event Horizon
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/danikova/event-horizon)](https://github.com/danikova/event-horizon/issues)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/danikova/event-horizon)](https://github.com/danikova/event-horizon/stargazers)
 
-Event Horizon is a straightforward and user-friendly countdown timer designed for simplicity and ease of use. With the ability to configure the timer using query parameters, users can effortlessly create personalized countdowns without the need for a database. This feature enables seamless sharing of configured timers through a simple copy-and-paste mechanism.
+**Event Horizon** is a simple and customizable countdown timer web application. It allows users to create and share countdowns with personalized titles, background images, and theming options. The app is fully client-side and doesn't require any backend services.
+
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Project Overview
+
+Event Horizon is designed to be a lightweight, easy-to-use countdown timer that can be customized through URL parameters. The application is fully responsive and supports theming based on user preferences. Users can set a custom background image and configure the timer's display without any server-side requirements.
 
 ## Features
 
-- **Customizable Title**: Personalize your timer by setting a unique title that reflects the event or countdown purpose.
+- **Customizable Countdown**: Set a countdown to any specific date and time.
+- **URL-Based Configuration**: Modify the countdown settings via URL parameters.
+- **Dynamic Background Image**: Use an Imgur link to set a custom background image.
+- **Responsive Design**: The layout adapts to various screen sizes and devices.
+- **Theming Support**: Switch between light and dark themes, or let it match the system settings.
 
-- **End Date Configuration**: Easily set the end date for your countdown, allowing you to precisely time your event or deadline.
+## Technologies Used
 
-- **Digit Selection**: Choose which digits to display on the webpage, giving you control over the information presented.
+- **React**: JavaScript library for building user interfaces.
+- **JavaScript/HTML/CSS**: Core web technologies.
+- **Vite**: A fast build tool and development server.
+- **Imgur API**: For fetching background images.
 
-- **Blurred Background Image**: Enhance the visual appeal of your timer with a dynamically blurred background picture fetched from Imgur.
+## Installation
 
-- **Elapsed and Remaining Time Display**: Stay informed with both elapsed and remaining time measures, ensuring you have a comprehensive view of the countdown progress.
+1. Clone the repository:
 
-- **Theming Options**: Tailor the timer to your preference with light, dark, or automatic theming, providing a visually pleasing experience in any environment.
+   ```bash
+   git clone https://github.com/danikova/event-horizon.git
+   ```
 
-- **Dominant Color Theming**: Immerse yourself in a cohesive design by having the main text colored with the dominant color extracted from the background image.
+2. Navigate to the project directory:
 
-- **PWA (Progressive Web App) Support**: Enjoy the benefits of a Progressive Web App, allowing users to install and use the timer seamlessly as if it were a native app.
+   ```bash
+   cd event-horizon
+   ```
 
-## Getting Started
+3. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+## Usage
+
+To start the application locally:
 
 ```bash
-npm install
 npm start
 ```
+
+Open your web browser and navigate to `http://localhost:3000` to view the application.
 
 ## Examples
 
@@ -37,7 +70,10 @@ npm start
 - [Announcement of results](https://danikova.github.io/event-horizon/?endDate=20231201T170000%2B01%3A00&digits=d%2Ch%2Cm%2Cs&title=Results+announced&imageId=0ypIMfs.jpg)
 - [Ski trip](https://danikova.github.io/event-horizon/?endDate=20240408T100000%2B01%3A00&digits=d%2Ch%2Cm%2Cs&title=Ski+trip+2024&imageId=rmfyUHg.jpg)
 
-## License
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+## Contributing
 
-Enjoy using Event Horizon for all your countdown needs!
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or new features.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
